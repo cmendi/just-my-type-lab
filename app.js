@@ -96,8 +96,8 @@ $(document).ready(function () {
 					);
 					numOfMistakes++;
 				}
-				// Once sentence is complete go to the next sentence and reset yellow block to the start
 			} else if (sentenceIndex < sentences.length - 1) {
+				// Once sentence is complete go to the next sentence and reset yellow block to the start
 				console.log(sentenceIndex);
 				$("#feedback").empty();
 				sentenceIndex++;
@@ -107,14 +107,14 @@ $(document).ready(function () {
 				$("#yellow-block").animate({ left: "15px" });
 				// Game over
 			} else if (sentenceIndex < sentences.length) {
-				// Display words per minute
+				// calculate words per minute
 				endTimer = e.timeStamp;
 				let timeDiff = endTimer - startTimer;
 				let minutes = Math.floor(timeDiff / 1000) / 60;
 				let wordsPerMin = Math.floor(
 					numberOfWords / minutes - 2 * numOfMistakes
 				);
-				// Remove everything but the score
+				// Remove everything and add the score
 				$("#sentence").empty();
 				$("#yellow-block").hide();
 				$("#feedback").empty();
