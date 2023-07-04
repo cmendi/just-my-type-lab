@@ -12,13 +12,23 @@ $(document).ready(function () {
 	let letterIndex = 0;
 	let sentenceIndex = 0;
 	let numberOfWords = 54;
+	let numOfMistakes = 0;
+	let keyPressed = 0;
+	let startTimer = 0;
+	let endTimer = 0;
+
+	let replayButton = $(
+		"<input class='btn btn-primary' value='Play Again' onClick='window.location.reload()'>"
+	);
 	// console.log(sentences[0]);
 	// Create a variable with the first sentence of the sentences array and display it on the page and current letter in the sentence
 	let currentSentence = sentences[sentenceIndex];
 	// console.log(currentSentence.length);
+	$("#sentence").text(currentSentence);
+
+	// Display the current letter on the page
 	let currentLetter = currentSentence[letterIndex];
 	let targetLetterDiv = $("#target-letter");
-	$("#sentence").text(sentences[sentenceIndex]);
 	targetLetterDiv.text(currentLetter);
 
 	// Hide the uppercase keyboard when page loads
@@ -46,21 +56,30 @@ $(document).ready(function () {
 
 	// Create event listener for keypress
 	$(document).keypress(function (e) {
+		// start the timer when a key is pressed
+		if (keyPressed < 1) {
+			startTimer = e.timeStamp;
+			keyPressed++;
+			// console.log(startTimer)
+		}
 		// console.log(e.which);
 		// console.log(e);
 		// Highlight letters when they are pressed
 		$("#" + e.which).addClass("background-yellow");
-		// Create a variable to target the first sentence
+		//Update the currentSentence variable with the new sentences index
 		let currentSentence = sentences[sentenceIndex];
-		// Create a variable that targets the index value of the letter in the sentence
+		// Update the currentLetter variable when a key is pressed to the next letterIndex
 		let currentLetter = currentSentence[letterIndex];
-		// Create a counter to go to the next letter index when key is pressed
+		// increase the letter index by 1 every time the key is pressed
 		letterIndex++;
+		// Update targetLetter variable when key is pressed with the current letter index
 		let targetLetter = currentSentence[letterIndex];
+		// Display the target letter
 		targetLetterDiv.text(targetLetter);
 		// Move yellow block across the screen when a key is pressed.
 		$("#yellow-block").animate({ left: "+=17.5px" }, { duration: 1 });
 
+		// Check to see if the sentence index is less than the length of the sentence
 		if (sentenceIndex < sentences.length) {
 			// console.log("running one");
 			if (letterIndex < currentSentence.length) {
@@ -75,6 +94,7 @@ $(document).ready(function () {
 					$("#feedback").append(
 						'<span class="glyphicon glyphicon-remove"></span>'
 					);
+					numOfMistakes++;
 				}
 				// Once sentence is complete go to the next sentence and reset yellow block to the start
 			} else if (sentenceIndex < sentences.length - 1) {
@@ -87,7 +107,27 @@ $(document).ready(function () {
 				$("#yellow-block").animate({ left: "15px" });
 				// Game over
 			} else if (sentenceIndex < sentences.length) {
-				console.log("Game Over");
+				// Display words per minute
+				endTimer = e.timeStamp;
+				let timeDiff = endTimer - startTimer;
+				let minutes = Math.floor(timeDiff / 1000) / 60;
+				let wordsPerMin = Math.floor(
+					numberOfWords / minutes - 2 * numOfMistakes
+				);
+				// Remove everything but the score
+				$("#sentence").empty();
+				$("#yellow-block").hide();
+				$("#feedback").empty();
+				$("#target-letter").empty();
+				$("#sentence").append("You had " + wordsPerMin + " words per minute!");
+
+				// button to restart the game
+				$(targetLetterDiv).append(replayButton);
+				// console.log(wordsPerMin);
+				// console.log(minutes);
+				// console.log(timeDiff);
+				// console.log(endTimer);
+				// console.log("Game Over");
 			}
 		}
 	});
