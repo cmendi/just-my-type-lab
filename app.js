@@ -61,34 +61,34 @@ $(document).ready(function () {
 		// Move yellow block across the screen when a key is pressed.
 		$("#yellow-block").animate({ left: "+=17.5px" }, { duration: 1 });
 
-		// if (sentenceIndex < sentences.length) {
-		// console.log("running one");
-		if (letterIndex < currentSentence.length) {
-			console.log("running two");
-			// Check and see if the letter that has been pressed matches the letter index in the sentence
-			if (e.which === currentLetter.charCodeAt()) {
-				// console.log("Correct");
-				// Target the foodback div and enter a checkmark
-				$("#feedback").append('<span class="glyphicon glyphicon-ok"></span>');
-			} else {
-				// console.log("Wrong");
-				$("#feedback").append(
-					'<span class="glyphicon glyphicon-remove"></span>'
-				);
+		if (sentenceIndex < sentences.length) {
+			// console.log("running one");
+			if (letterIndex < currentSentence.length) {
+				console.log("running two");
+				// Check and see if the letter that has been pressed matches the letter index in the sentence
+				if (e.which === currentLetter.charCodeAt()) {
+					// console.log("Correct");
+					// Target the foodback div and enter a checkmark
+					$("#feedback").append('<span class="glyphicon glyphicon-ok"></span>');
+				} else {
+					// console.log("Wrong");
+					$("#feedback").append(
+						'<span class="glyphicon glyphicon-remove"></span>'
+					);
+				}
+				// Once sentence is complete go to the next sentence and reset yellow block to the start
+			} else if (sentenceIndex < sentences.length - 1) {
+				console.log(sentenceIndex);
+				$("#feedback").empty();
+				sentenceIndex++;
+				$("#sentence").text(sentences[sentenceIndex]);
+				targetLetterDiv.text(sentences[sentenceIndex].charAt(0));
+				letterIndex = 0;
+				$("#yellow-block").animate({ left: "15px" });
+				// Game over
+			} else if (sentenceIndex < sentences.length) {
+				console.log("Game Over");
 			}
-			// Once sentence is complete go to the next sentence and reset yellow block to the start
-		} else if (sentenceIndex < sentences.length - 1) {
-			console.log(sentenceIndex);
-			$("#feedback").empty();
-			sentenceIndex++;
-			$("#sentence").text(sentences[sentenceIndex]);
-			targetLetterDiv.text(sentences[sentenceIndex].charAt(0));
-			letterIndex = 0;
-			$("#yellow-block").animate({ left: "15px" });
-			// Game over
-		} else if (sentenceIndex < sentences.length) {
-			console.log("Game Over");
 		}
-		// }
 	});
 });
